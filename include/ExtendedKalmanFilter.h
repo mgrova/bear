@@ -25,38 +25,26 @@
 
 #include <Eigen/Eigen>	// Eigen linear algebra library
 
-namespace mico {
-	/** Abstrac class that implements Extended Kalman Filter (EKF) pipeline.
-	*/
+namespace bear {
+	// Abstrac class that implements Extended Kalman Filter (EKF) pipeline.
+	//
 	template<typename Type_, int D1_, int D2_>
 	class ExtendedKalmanFilter{
 	public:
-		/** \brief EKF class construction and initialization.
-		*/
 		ExtendedKalmanFilter();		// 666 TODO: initialize matrixes.
 
-		/** \brief set EKF initial matrixes.
-		*	@param _Q: 
-		*	@param _R: 
-		*	@param _x0: 
-		*/
 		void setUpEKF(	const Eigen::Matrix<Type_, D1_, D1_ > 	_Q, 
 						const Eigen::Matrix<Type_, D2_, D2_ >	_R, 
 						const Eigen::Matrix<Type_, D1_, 1 > 	_x0);
 
-		/** \brief get last filtered estimation. 777 rename to state().
-		*/
+		//get last filtered estimation
 		Eigen::Matrix<Type_, D1_, 1> state() const;
 
 	public:
-		/** \brief compute single step of EKF.
-		*	@param _zK: observable state.
-		*	@param _incT: elapsed time between previous and current state.
-		*/
 		void stepEKF(const Eigen::Matrix<Type_, D2_, 1 > & _Zk, const double _incT);
 
 	protected:
-		// Non specific funtcions of the EKF.
+		// Non specific functions of the EKF. 
 		virtual void updateJf(const double _incT) = 0;
 		virtual void updateHZk() = 0;
 		virtual void updateJh() = 0;
@@ -66,19 +54,19 @@ namespace mico {
 		void filterStep(const Eigen::Matrix<Type_, D2_, 1 >&_Zk);
 
 	protected:
-		Eigen::Matrix<Type_, D1_, 1 > 	mXfk, mXak;
-		Eigen::Matrix<Type_, D1_, D2_ > mK;
-		Eigen::Matrix<Type_, D1_, D1_ > mJf;
-		Eigen::Matrix<Type_, D2_, D1_ > mJh;
-		Eigen::Matrix<Type_, D1_, D1_ > mP;
-		Eigen::Matrix<Type_, D1_, D1_ > mQ;
-		Eigen::Matrix<Type_, D2_, D2_ > mR;
-		Eigen::Matrix<Type_, D2_, 1 > mHZk;
+		Eigen::Matrix<Type_, D1_, 1 > 	Xfk_, Xak_;
+		Eigen::Matrix<Type_, D1_, D2_ > K_;
+		Eigen::Matrix<Type_, D1_, D1_ > Jf_;
+		Eigen::Matrix<Type_, D2_, D1_ > Jh_;
+		Eigen::Matrix<Type_, D1_, D1_ > P_;
+		Eigen::Matrix<Type_, D1_, D1_ > Q_;
+		Eigen::Matrix<Type_, D2_, D2_ > R_;
+		Eigen::Matrix<Type_, D2_, 1 >   HZk_;
 
 	};	//	class ExtendedKalmanFilter
-}	//	namespace 
+}	//	namespace bear
 
-#include <mico/base/state_filtering/ExtendedKalmanFilter.inl>
+#include <bear/include/ExtendedKalmanFilter.inl>
 
 
 #endif	

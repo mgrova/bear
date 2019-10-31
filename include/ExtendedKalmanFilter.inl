@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------------------------------------------
-//  mico
+//  EKF ABSTRACT CLASS (MICO)
 //---------------------------------------------------------------------------------------------------------------------
-//  Copyright 2018 Pablo Ramon Soria (a.k.a. Bardo91) pabramsor@gmail.com
+//  Copyright 2019 ViGUS University of Seville
 //---------------------------------------------------------------------------------------------------------------------
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 //  and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -34,21 +34,21 @@ namespace mico {
 	void ExtendedKalmanFilter<Type_, D1_, D2_>::setUpEKF(	const Eigen::Matrix<Type_, D1_, D1_ > 	_Q, 
 															const Eigen::Matrix<Type_, D2_, D2_ >	_R, 
 															const Eigen::Matrix<Type_, D1_, 1 > 	_x0){
-		mQ = _Q;
-		mR = _R;
-		mXak = _x0;
-		mXfk = _x0;
-		mK.setZero();
-		mJf.setIdentity();
-		mP.setIdentity();
-		mHZk.setZero();
-		mJh.setZero();
+		Q_ = _Q;
+		R_ = _R;
+		Xak_ = _x0;
+		Xfk_ = _x0;
+		K_.setZero();
+		Jf_.setIdentity();
+		P_.setIdentity();
+		HZk_.setZero();
+		Jh_.setZero();
 	}
 		
 	//-----------------------------------------------------------------------------
 	template<typename Type_, int D1_, int D2_>
 	Eigen::Matrix<Type_, D1_, 1> ExtendedKalmanFilter<Type_, D1_, D2_>::state() const{
-		return mXak;
+		return Xak_;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -63,8 +63,8 @@ namespace mico {
 	void ExtendedKalmanFilter<Type_, D1_, D2_>::forecastStep(const double _incT){
 		updateJf(_incT);
 		
-		mXfk = mJf * mXak;
-		mP = mJf * mP * mJf.transpose() + mQ;
+		Xfk_ = Jf_ * Xak_;
+		P_   = Jf_ * P_ * Jf_.transpose() + Q_;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -72,10 +72,10 @@ namespace mico {
 	void ExtendedKalmanFilter<Type_, D1_, D2_>::filterStep(const Eigen::Matrix<Type_, D2_, 1 >&_Zk){
 		updateHZk();
 		updateJh();
-		mK = mP * mJh.transpose() * ((mJh * mP * mJh.transpose() + mR).inverse());
-		mXak = mXfk + mK * (_Zk - mHZk);
+		K_ = P_ * Jh_.transpose() * ((Jh_ * P_ * Jh_.transpose() + R_).inverse());
+		Xak_ = Xfk_ + K_ * (_Zk - HZk_);
 		Eigen::Matrix<Type_, D1_, D1_> I; I.setIdentity();
-		mP = (I - mK * mJh) * mP;
+		P_ = (I - K_ * Jh_) * P_;
 	}
 	//-----------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------

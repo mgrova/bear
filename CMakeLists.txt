@@ -28,7 +28,7 @@ PROJECT(bear VERSION 0.1 LANGUAGES C CXX)
 
 option(BUILD_EXAMPLES "Compile examples" OFF)
 option(BUILD_TESTS    "Prepare tests"    OFF)
-#option(BUILD_TOOLS    "Compile tools"    OFF)
+option(BUILD_TOOLS    "Compile tools"    OFF)
 
 #########################################
 ###### Loading 3rd party libraries ######
@@ -167,12 +167,12 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bearConfig.cmake"
         DESTINATION lib/cmake/${PROJECT_NAME}
         )
 
-# uninstall target 
-if(NOT TARGET uninstall) 
-  configure_file( 
-      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/cmake_uninstall.cmake.in" 
-      "${CMAKE_CURRENT_BINARY_DIR}/cmake/templates/cmake_uninstall.cmake" 
-      IMMEDIATE @ONLY) 
+# # uninstall target 
+# if(NOT TARGET uninstall) 
+#   configure_file( 
+#       "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/cmake_uninstall.cmake.in" 
+#       "${CMAKE_CURRENT_BINARY_DIR}/cmake/templates/cmake_uninstall.cmake" 
+#       IMMEDIATE @ONLY) 
  
-  add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake) 
-endif() 
+#   add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake) 
+# endif() 
