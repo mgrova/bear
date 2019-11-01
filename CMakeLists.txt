@@ -26,7 +26,7 @@ PROJECT(bear VERSION 0.1 LANGUAGES C CXX)
 ######			General config	   ######
 #########################################
 
-option(BUILD_EXAMPLES "Compile examples" OFF)
+option(BUILD_EXAMPLES "Compile examples" ON)
 option(BUILD_TESTS    "Prepare tests"    OFF)
 option(BUILD_TOOLS    "Compile tools"    OFF)
 
@@ -102,9 +102,9 @@ endif(Eigen3_FOUND)
 #########################################
 ######			Examples	             ######
 #########################################
-# if(${BUILD_EXAMPLES})
-# 	add_subdirectory(examples)
-# endif()
+if(${BUILD_EXAMPLES})
+	add_subdirectory(examples)
+endif()
 
 #########################################
 ######			Tools	                 ######

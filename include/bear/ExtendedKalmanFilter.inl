@@ -21,7 +21,7 @@
 
 #include <iostream>
 
-namespace mico {
+namespace bear {
 	
 	//-----------------------------------------------------------------------------
 	template<typename Type_, int D1_, int D2_>
@@ -63,7 +63,7 @@ namespace mico {
 	void ExtendedKalmanFilter<Type_, D1_, D2_>::forecastStep(const double _incT){
 		updateJf(_incT);
 		
-		Xfk_ = Jf_ * Xak_;
+		Xfk_ = Jf_ * Xak_; 	
 		P_   = Jf_ * P_ * Jf_.transpose() + Q_;
 	}
 
@@ -72,10 +72,10 @@ namespace mico {
 	void ExtendedKalmanFilter<Type_, D1_, D2_>::filterStep(const Eigen::Matrix<Type_, D2_, 1 >&_Zk){
 		updateHZk();
 		updateJh();
-		K_ = P_ * Jh_.transpose() * ((Jh_ * P_ * Jh_.transpose() + R_).inverse());
+		K_ = P_ * Jh_.transpose() * ((Jh_ * P_ * Jh_.transpose() + R_).inverse());	
 		Xak_ = Xfk_ + K_ * (_Zk - HZk_);
 		Eigen::Matrix<Type_, D1_, D1_> I; I.setIdentity();
-		P_ = (I - K_ * Jh_) * P_;
+		P_ = (I - K_	 * Jh_) * P_;
 	}
 	//-----------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------

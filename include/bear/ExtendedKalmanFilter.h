@@ -54,19 +54,19 @@ namespace bear {
 		void filterStep(const Eigen::Matrix<Type_, D2_, 1 >&_Zk);
 
 	protected:
-		Eigen::Matrix<Type_, D1_, 1 > 	Xfk_, Xak_;
-		Eigen::Matrix<Type_, D1_, D2_ > K_;
-		Eigen::Matrix<Type_, D1_, D1_ > Jf_;
-		Eigen::Matrix<Type_, D2_, D1_ > Jh_;
-		Eigen::Matrix<Type_, D1_, D1_ > P_;
-		Eigen::Matrix<Type_, D1_, D1_ > Q_;
-		Eigen::Matrix<Type_, D2_, D2_ > R_;
-		Eigen::Matrix<Type_, D2_, 1 >   HZk_;
+		Eigen::Matrix<Type_, D1_, 1 > 	Xfk_, Xak_; // actual and forecast state at time k
+		Eigen::Matrix<Type_, D2_, 1 >   HZk_;		// Observation matrix
+		Eigen::Matrix<Type_, D1_, D2_ > K_;			// Kalman gain
+		Eigen::Matrix<Type_, D1_, D1_ > P_;			// Prediction matrix
+		Eigen::Matrix<Type_, D1_, D1_ > Jf_;		// Jacobian of prediction matrix
+		Eigen::Matrix<Type_, D2_, D1_ > Jh_;		// Jacobian of observation matrix
+		Eigen::Matrix<Type_, D1_, D1_ > Q_;			// Prediction covariance
+		Eigen::Matrix<Type_, D2_, D2_ > R_;			// Observation covariance
 
 	};	//	class ExtendedKalmanFilter
 }	//	namespace bear
 
-#include <bear/include/ExtendedKalmanFilter.inl>
+#include <bear/ExtendedKalmanFilter.inl>
 
 
 #endif	
