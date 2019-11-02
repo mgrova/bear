@@ -26,9 +26,9 @@
 #include "bear/ExtendedKalmanFilter.h"
 
 namespace bear{
-	// State vector Xk = {x, y, z, vx, vy, vz, ax, ay, az, bax, bay, baz}
-	// Observation vector Zk = {x, y, z, ax, ay, az}
-	class EKF : public  bear::ExtendedKalmanFilter<double,12,6>{
+	// State vector Xk = {x, y, z, vx, vy, vz}
+	// Observation vector Zk = {x, y, z}
+	class EKF : public  bear::ExtendedKalmanFilter<double,6,3>{
 	public:
         bool init();
 
@@ -39,7 +39,9 @@ namespace bear{
 
     private:
 		
-	
+		Eigen::Matrix<double,6,6> Q_;  // State covariance
+  		Eigen::Matrix<double,3,3> R_;  // Observation covariance
+  		Eigen::Matrix<double,6,1> X0_; // Initial state
 
     };
 }

@@ -33,6 +33,10 @@ if(${Eigen3_FOUND})
 endif()
 
 #########################################
+## Load opencv
+find_package(OpenCV REQUIRED)
+
+#########################################
 ## Compiler specific options
 set(REMOTE_CONTROLLER_COMPILE_OPTIONS "-Wall -g -O0")
 
@@ -48,5 +52,5 @@ string(REPLACE " " ";" REMOTE_CONTROLLER_COMPILE_OPTIONS_REPLACED_FLAGS ${REMOTE
 
 target_compile_options(${PROJECT_NAME} PUBLIC ${REMOTE_CONTROLLER_COMPILE_OPTIONS_REPLACED_FLAGS})
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
-
-target_include_directories(${PROJECT_NAME} PUBLIC "/usr/include/eigen3")
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+target_include_directories(${PROJECT_NAME} PUBLIC "/usr/include/eigen3"  ${OpenCV_INCLUDE_DIRS})

@@ -22,19 +22,21 @@
 #include "EKF.h"
 
 namespace bear{
-    bool EKF::init(){
-        printf("implementation\n");
-        return true;
-    }
-
 
     void EKF::updateJf(const double _incT){
-        
+        Jf_.setIdentity();
+        Jf_(0,1) = _incT;
+        Jf_(2,3) = _incT;
+        Jf_(4,5) = _incT;
     }
+
 	void EKF::updateHZk(){
-            
+        HZk_ = Xfk_.block<3,1>(0,0);       
     }
+
 	void EKF::updateJh(){
-            
+        Jh_(0,0) = 1;
+        Jh_(1,2) = 1; 
+        Jh_(2,4) = 1;
     }
 }

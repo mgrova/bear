@@ -63,10 +63,9 @@ namespace bear {
 		Eigen::Matrix<Type_, D1_, D1_ > Q_;			// Prediction covariance
 		Eigen::Matrix<Type_, D2_, D2_ > R_;			// Observation covariance
 
-	};	//	class ExtendedKalmanFilter
-}	//	namespace bear
+	};
+}
 
 #include <bear/ExtendedKalmanFilter.inl>
-
 
 #endif	
