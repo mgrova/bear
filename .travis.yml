@@ -27,6 +27,8 @@ matrix:
             - libomp-dev
             - libopencv-dev
             - libopencv-contrib-dev
+            - libpcl-dev
+
 
 before_install:
   - eval "${MATRIX_EVAL}"
