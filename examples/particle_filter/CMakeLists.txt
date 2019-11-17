@@ -19,8 +19,17 @@
 ##  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##---------------------------------------------------------------------------------------------------------------------
 
-if(${BUILD_EXAMPLES}) 
-add_subdirectory(extended_KF_3D)
-add_subdirectory(particle_filter)
-endif()
 
+add_executable(example_pf_2d example_2d.cpp)
+target_link_libraries(example_pf_2d LINK_PUBLIC bear)
+
+
+find_package(PCL QUIET REQUIRED)
+if(${PCL_FOUND})
+	add_executable(example_pf_3d example_3d.cpp)
+	target_link_libraries(example_pf_3d LINK_PUBLIC bear)
+	target_include_directories(example_pf_3d PUBLIC ${PCL_INCLUDE_DIRS})
+	target_link_libraries(example_pf_3d LINK_PUBLIC ${PCL_LIBRARIES})
+	
+	target_compile_definitions(example_pf_3d PUBLIC "ENABLE_PCL" "DISABLE_PCAP" "DISABLE_PNG" "DISABLE_LIBUSB_1_0")
+endif()
