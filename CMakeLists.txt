@@ -42,24 +42,6 @@ endif()
 
 # set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/" ${CMAKE_MODULE_PATH})
 
-list(APPEND BEAR_DEFINITIONS "")
-set(BEAR_COMPILE_OPTIONS "-Wall -g -O0")
-
-#########################################
-## Load Eigen
-find_package(Eigen3 REQUIRED)
-if(${Eigen3_FOUND})
-	MESSAGE( STATUS "Eigen FOUND")
-	list(APPEND BEAR_DEFINITIONS "BEAR_USE_EIGEN3")
-endif()
-
-## Load OpenCV
-find_package(OpenCV)
-if(${OpenCV_FOUND})
-	MESSAGE( STATUS "OpenCV FOUND")
-	list(APPEND BEAR_DEFINITIONS "BEAR_USE_OpenCV")
-endif()
-
 
 #########################################
 ######			Library	   ######
@@ -75,20 +57,35 @@ target_include_directories(${PROJECT_NAME}
     $<INSTALL_INTERFACE:include>
 )
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC ${BEAR_DEFINITIONS})
-string(REPLACE " " ";" BEAR_COMPILE_OPTIONS_REPLACED_FLAGS ${BEAR_COMPILE_OPTIONS})
-
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
 
+## Load OpenCV
+find_package(OpenCV)
 if(OpenCV_FOUND)
+  MESSAGE( STATUS "OpenCV FOUND")
+	target_compile_definitions(${PROJECT_NAME} PUBLIC  "BEAR_USE_OpenCV")
   target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS})
   target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBRARIES})
 endif(OpenCV_FOUND)
 
-if (Eigen3_FOUND)
+## Load Eigen
+find_package(Eigen3 REQUIRED)
+if(${Eigen3_FOUND})
+	MESSAGE( STATUS "Eigen FOUND")
+	target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_EIGEN3")
   target_include_directories(${PROJECT_NAME} PUBLIC "/usr/include/eigen3")
 endif(Eigen3_FOUND)
+
+
+## Load Eigen
+find_package(OpenCL REQUIRED)
+if(${OpenCL_FOUND})
+  MESSAGE( STATUS "OpenCL FOUND")
+  target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_OPENGL")
+  target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCL_INCLUDE_DIR})
+  target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCL_LIBRARY})
+endif()
 
 #########################################
 ######			Documentation	   ######
