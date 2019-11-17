@@ -23,7 +23,7 @@
 #define BEAR_EKF_H_
 
 
-#include "bear/ExtendedKalmanFilter.h"
+#include <bear/ExtendedKalmanFilter.h>
 
 
 namespace bear{
