@@ -20,41 +20,70 @@
 //---------------------------------------------------------------------------------------------------------------------
 
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "EKF.h"
 #include <opencv2/opencv.hpp>
+#include <thread>
+#include <iterator>
 
 int main(){
-    const double NOISE_LEVEL = 0.1;
 
-    // Observation covariance matrix
-    Eigen::Matrix<double,3,3> R;
-    R = Eigen::Matrix<double,3,3>::Identity();
-    R.block<3,3>(0,0) *= 0.01*NOISE_LEVEL;
+    std::ifstream gps_file("/home/marrcogrova/inspector_gps.txt"); 
+    std::ifstream imu_file("/home/marrcogrova/inspector_imuAcc.txt");
 
-    // Prediction covariance matrix
-    Eigen::Matrix<double,6,6> Q;
-    Q = Eigen::Matrix<double,6,6>::Identity();
-    Q.block<3,3>(0,0) *= 0.001;
-    Q.block<3,3>(3,3) *= 0.02;
+    if(!gps_file.is_open()){
+        return 0;
+    }
+    if(!imu_file.is_open()){
+        return 0;
+    }
 
-    // Initial state
-    Eigen::Matrix<double,6,1> X0;
-    X0.block<1,3>(0,0) = Eigen::Vector3d(1.0 , 0.0 , 0.0); // x,y,z
-    X0.block<1,3>(0,3) = Eigen::Vector3d(0.0 , 0.0 , 0.0); // vx,vy,vz
+    Eigen::Matrix<double,12,12> Q = Eigen::Matrix<double,12,12>::Identity() * 0.1;  // State covariance
+	Eigen::Matrix<double,6,6>   R = Eigen::Matrix<double,6,6>::Identity() * 0.1;    // Observation covariance
+	Eigen::Matrix<double,12,1>  X0= (Eigen::Matrix<double,12,1>() <<  // Initial state
+			    	             	0.0,   0.0,   0.0,             // x,y,z
+			    	             	1.0,   1.0,   1.0,             // vx,vy,vz
+			    	             	0.0,   0.0,   0.0,             // ax,ay,az
+			    	               -0.14, 0.051, 6.935).finished(); // bx,by,bz
 
     // Kalman filter
     bear::EKF ekf;
     ekf.setUpEKF(Q , R , X0);
+    std::chrono::time_point<std::chrono::system_clock> prevT;
+    prevT = std::chrono::system_clock::now();
 
-    float fakeTimer = 0;
-    while(true){
-        Eigen::Matrix<double, 3,1> Zk;    // New observation
-        
-        ekf.stepEKF(Zk , double(0.03)); // face time
+    while(!gps_file.eof() || !imu_file.eof()){
+        std::vector<double> GPSPositionObs     = {0.0 , 0.0 , 0.0};
+        std::vector<double> ImuAccelerationObs = {0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0};
 
-        Eigen::Matrix<double, 6,1> Xk = ekf.state();
+        std::string DataGPS;
+        getline(gps_file,DataGPS);
+        std::stringstream ss1(DataGPS);
+        ss1 >> GPSPositionObs[0] >> GPSPositionObs[1] >> GPSPositionObs[2];
 
-        fakeTimer += .03;
+        std::string DataImu;
+        getline(imu_file,DataImu);
+        std::stringstream ss2(DataImu);
+        ss2 >> ImuAccelerationObs[0] >> ImuAccelerationObs[1] >> ImuAccelerationObs[2] >> ImuAccelerationObs[3] >>
+               ImuAccelerationObs[4] >> ImuAccelerationObs[5] >> ImuAccelerationObs[6] >>
+               ImuAccelerationObs[7] >> ImuAccelerationObs[8] >> ImuAccelerationObs[9];
+
+        Eigen::Matrix<double, 6,1> Zk = (Eigen::Matrix<double,6,1>() <<
+                                    GPSPositionObs[0] , GPSPositionObs[1] , GPSPositionObs[2],
+			    	             ImuAccelerationObs[7] , ImuAccelerationObs[8] , ImuAccelerationObs[9]).finished();
+
+        std::cout << Zk << std::endl;
+
+        auto t1 = std::chrono::system_clock::now();
+        auto incT = std::chrono::duration_cast<std::chrono::milliseconds>(t1-prevT).count()/1000.0f;
+        ekf.stepEKF(Zk , incT); // face time
+        prevT= t1;
+        Eigen::Matrix<double, 12,1> Xk = ekf.state();
+
+        std::cout << "Position predicted: " << Xk(0) << " " << Xk(1) << " " << Xk(2) << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
     return 0;

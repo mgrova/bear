@@ -25,12 +25,13 @@
 
 #include "bear/ExtendedKalmanFilter.h"
 
+
 namespace bear{
 	// State vector Xk = {x, y, z, vx, vy, vz}
 	// Observation vector Zk = {x, y, z}
-	class EKF : public  bear::ExtendedKalmanFilter<double,6,3>{
+	class EKF : public  bear::ExtendedKalmanFilter<double,12,6>{
 	public:
-        bool init();
+        EKF(){};
 
 	protected:
 		void updateJf(const double _incT);
@@ -38,10 +39,16 @@ namespace bear{
 		void updateJh();
 
     private:
+		Eigen::Vector3d scaleFactor_=Eigen::Vector3d( 1.0 , 1.0 , 1.0 ); 	// _scaleFactor (must be estimated)
 		
-		Eigen::Matrix<double,6,6> Q_;  // State covariance
-  		Eigen::Matrix<double,3,3> R_;  // Observation covariance
-  		Eigen::Matrix<double,6,1> X0_; // Initial state
+		// Values taken from -> https://pdfs.semanticscholar.org/7e13/6039c245d21a070869779286675180ac1fba.pdf
+		Eigen::Vector3d C1_ =Eigen::Vector3d( 0.7562 , 0.0514 , 1.138);		// _c1 [m/(s^2),m/(s^2),deg/s]
+		Eigen::Vector3d C2_ =Eigen::Vector3d(-0.8255 , 0.0451 , 16.41);		// _c2 [m/(s^2),m/(s^2),deg/s]
+		Eigen::Vector3d T_  =Eigen::Vector3d( 0.3042 , 0.7573 , 1.565);		//  _t [s, s, s]
+		
+		Eigen::Matrix<double,12,12> Q_;  // State covariance
+  		Eigen::Matrix<double,6,6> R_;  // Observation covariance
+  		Eigen::Matrix<double,12,1> X0_; // Initial state
 
     };
 }
