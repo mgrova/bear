@@ -20,7 +20,7 @@
 ##---------------------------------------------------------------------------------------------------------------------
 
 if(${BUILD_EXAMPLES}) 
-add_subdirectory(extended_KF_3D)
+add_subdirectory(EKF_3D)
 add_subdirectory(particle_filter)
 endif()
 
