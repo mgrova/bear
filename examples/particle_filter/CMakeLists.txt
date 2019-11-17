@@ -22,13 +22,14 @@
 
 add_executable(example_pf_2d example_2d.cpp)
 target_link_libraries(example_pf_2d LINK_PUBLIC bear)
+target_include_directories(example_pf_2d PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 
 find_package(PCL QUIET REQUIRED)
 if(${PCL_FOUND})
 	add_executable(example_pf_3d example_3d.cpp)
 	target_link_libraries(example_pf_3d LINK_PUBLIC bear)
-	target_include_directories(example_pf_3d PUBLIC ${PCL_INCLUDE_DIRS})
+	target_include_directories(example_pf_3d PUBLIC ${PCL_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/include)
 	target_link_libraries(example_pf_3d LINK_PUBLIC ${PCL_LIBRARIES})
 	
 	target_compile_definitions(example_pf_3d PUBLIC "ENABLE_PCL" "DISABLE_PCAP" "DISABLE_PNG" "DISABLE_LIBUSB_1_0")

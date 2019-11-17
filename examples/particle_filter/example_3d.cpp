@@ -22,7 +22,7 @@
 #include <iostream>
 #include <string>
 
-#include <mico/base/state_filtering/ParticleFilterCPU.h>
+#include <bear/ParticleFilterCPU.h>
 
 #include <pcl/visualization/pcl_visualizer.h>
 #include <Eigen/Eigen>
@@ -32,7 +32,7 @@
 #include<bits/stdc++.h>
 
 using namespace std;
-using namespace mico ;
+using namespace bear;
 
 
 int WORLD_SIZE = 5;
