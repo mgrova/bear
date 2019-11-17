@@ -1,0 +1,44 @@
+language: cpp
+git:
+  quiet: true
+  submodules: true
+  depth: 3
+matrix:
+  include:
+    - os: linux
+      dist: bionic
+      sudo: true
+      compiler: gcc
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      addons:
+        apt:
+          packages:
+            - autoconf
+            - libtool
+            - flex
+            - bison
+            - libeigen3-dev
+            - libyaml-dev
+            - libboost-all-dev
+            - libflann-dev
+            - liblapack-dev
+            - libblas-dev
+            - libomp-dev
+            - libopencv-dev
+            - libopencv-contrib-dev
+
+before_install:
+  - eval "${MATRIX_EVAL}"
+
+script:
+    ############################################################################
+    # Build main and tests
+    ############################################################################
+     - mkdir -p build
+     - cd build
+     - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} -DCMAKE_BUILD_TYPE=Coverage .. 
+     - make -j$(nproc)
+
+notifications:
+  email: false
