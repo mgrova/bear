@@ -21,4 +21,4 @@
 
 add_executable(example_EKF_3D src/EKF.cpp src/main.cpp)
 target_link_libraries(example_EKF_3D LINK_PUBLIC bear)
-target_include_directories(example_EKF_3D PUBLIC include ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(example_EKF_3D PUBLIC include)

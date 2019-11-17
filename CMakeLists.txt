@@ -69,7 +69,11 @@ file(GLOB_RECURSE BEAR_SOURCES "src/*.cpp" "src/*.c")
 
 add_library(${PROJECT_NAME} SHARED ${BEAR_SOURCES} ${BEAR_HEADERS})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${BEAR_DEFINITIONS})
 string(REPLACE " " ";" BEAR_COMPILE_OPTIONS_REPLACED_FLAGS ${BEAR_COMPILE_OPTIONS})
