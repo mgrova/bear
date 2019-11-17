@@ -79,7 +79,7 @@ endif(Eigen3_FOUND)
 
 
 ## Load Eigen
-find_package(OpenCL REQUIRED)
+find_package(OpenCL)
 if(${OpenCL_FOUND})
   MESSAGE( STATUS "OpenCL FOUND")
   target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_OPENGL")
