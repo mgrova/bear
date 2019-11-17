@@ -28,6 +28,7 @@ find_package(PCL)
 if(${PCL_FOUND})
 	add_executable(example_pf_3d example_3d.cpp)
 	target_link_libraries(example_pf_3d LINK_PUBLIC bear)
+	target_include_directories(example_pf_3d PUBLIC ${PCL_INCLUDE_DIRS})
 	target_link_libraries(example_pf_3d LINK_PUBLIC ${PCL_LIBRARIES})
 	
 	target_compile_definitions(example_pf_3d PUBLIC "ENABLE_PCL" "DISABLE_PCAP" "DISABLE_PNG" "DISABLE_LIBUSB_1_0")
