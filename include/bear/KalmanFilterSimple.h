@@ -51,8 +51,7 @@ namespace bear {
 	protected:
 		Eigen::Matrix<double, 4, 1 > Xfk_, Xak_;    // actual and forecast state at time k
 		Eigen::Matrix<double, 4, 4 > K_;			// Kalman gain
-		Eigen::Matrix<double, 4, 4 > P_;			// Prediction matrix
-		// Eigen::Matrix<double, 4, 4 > Pak_, Pfk_;	// actual and forecast prediction matrix at time k (sigma)
+		Eigen::Matrix<double, 4, 4 > Pak_, Pfk_;	// actual and forecast prediction matrix at time k (sigma)
 		Eigen::Matrix<double, 4, 4 > Q_;			// Observation covariance (sensors)
 		Eigen::Matrix<double, 4, 4 > R_;			// Prediction covariance (model)
 

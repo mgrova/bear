@@ -37,14 +37,18 @@ namespace bear {
 											0   , 0   , q*q  , 0   ,
 											0   , 0   , 0    , q*q ).finished();
 
-		double r = 0.01;
+		double r = 0.1;
 		R_ = (Eigen::Matrix<double,4,4>() << r*r, 0   , 0      , 0   ,
 											0   , r*r , 0      , 0   ,
-											0   , 0   , 2*r*r  , 0   ,
-											0   , 0   , 0      , 2*r*r ).finished();
+											0   , 0   , r*r  , 0   ,
+											0   , 0   , 0      , r*r ).finished();
 
 		K_.setZero();
-		P_.setIdentity();
+		Pak_ = (Eigen::Matrix<double,4,4>() << r*r, 0   , 0      , 0   ,
+										        0 , r*r , 0      , 0   ,
+										        0 , 0   , 2.0*r*r, 0   ,
+										        0 , 0   , 0      , 2.0*r*r ).finished();
+		Pfk_.setIdentity();
 	}
 	//-----------------------------------------------------------------------------
 	void KalmanFilter::setUpKF(const Eigen::Matrix<double, 4, 4 > 	_Q, 
@@ -80,8 +84,11 @@ namespace bear {
 										     0 , 0 , 1     , 0    ,
 										     0 , 0 , 0     , 1    ).finished();
 		
-		Xfk_ = A_ * Xak_ + B_; 	
-		P_   = A_ * P_ * A_.transpose() + R_;
+
+		Xfk_ = A_ * Xak_ ;//+ B_; 	
+		Pfk_ = A_ * Pak_ * A_.transpose() + R_;
+		std::cout << Pfk_ << std::endl;
+
 	}
 
 	//-----------------------------------------------------------------------------
@@ -92,11 +99,12 @@ namespace bear {
 											0 , 1 , 0      , -incT_ ).finished();
 
 
-		K_ = P_ * C_.transpose() * ((C_ * P_ * C_.transpose() + R_).inverse());	
+		K_ = Pfk_ * C_.transpose() * ((C_ * Pfk_ * C_.transpose() + Q_).inverse());	
 		Xak_ = Xfk_ + K_ * (_Zk - C_ * Xfk_);
 
 		Eigen::Matrix<double, 4, 4> I; I.setIdentity();
-		P_ = (I - K_ * C_) * P_;
+		Pak_ = (I - K_ * C_) * Pfk_;
+
 	}
 	//-----------------------------------------------------------------------------
 	

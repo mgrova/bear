@@ -20,15 +20,42 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 #include<bear/KalmanFilterSimple.h>
+#include <thread>
 
 int main(int _argc , char **_argv){
 
-    bear::KalmanFilter kf;
+    bear::KalmanFilter *kf;
 
+    Eigen::Matrix<double, 4,1 > x0 = (Eigen::Matrix<double, 4,1 >() << 0.0 , 0.0, 0.0, 0.0).finished();
 
+    kf->setUpKF(x0);
 
+    std::chrono::time_point<std::chrono::system_clock> prevT;
+    prevT = std::chrono::system_clock::now();
 
+    std::vector<double> pos = {0.0 , 0.0};
+    std::vector<double> vel = {0.0 , 0.0};
+    
+    while(true){
+        // pos[0] = pos[0] + vel[0]*0.1;
+        // pos[1] = pos[1] + vel[1]*0.1;
 
+        Eigen::Matrix<double, 4,1> Zk = (Eigen::Matrix<double,4,1>() <<
+                                    pos[0] , pos[1] , vel[0] , vel[1]).finished();
+
+        std::cout << Zk << std::endl;
+
+        auto t1 = std::chrono::system_clock::now();
+        auto incT = std::chrono::duration_cast<std::chrono::milliseconds>(t1-prevT).count()/1000.0f;
+        kf->stepKF(Zk , incT);
+        prevT= t1;
+        Eigen::Matrix<double, 4,1> Xk = kf->state();
+
+        std::cout << "Position predicted: " << Xk(0) << " " << Xk(1)  << std::endl;
+        std::cout << "Velocidad predicted: " << Xk(2) << " " << Xk(3)  << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    }
 
     return 0;
 }

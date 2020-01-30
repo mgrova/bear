@@ -77,7 +77,7 @@ int main(){
 
         auto t1 = std::chrono::system_clock::now();
         auto incT = std::chrono::duration_cast<std::chrono::milliseconds>(t1-prevT).count()/1000.0f;
-        ekf.stepEKF(Zk , incT); // face time
+        ekf.stepEKF(Zk , static_cast<double>(incT)); // face time
         prevT= t1;
         Eigen::Matrix<double, 12,1> Xk = ekf.state();
 
