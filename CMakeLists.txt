@@ -62,12 +62,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
 
 ## Load OpenCV
 find_package(OpenCV)
-if(OpenCV_FOUND)
+if(${OpenCV_FOUND})
   MESSAGE( STATUS "OpenCV FOUND")
 	target_compile_definitions(${PROJECT_NAME} PUBLIC  "BEAR_USE_OpenCV")
   target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS})
   target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBRARIES})
-endif(OpenCV_FOUND)
+endif(${OpenCV_FOUND})
 
 ## Load Eigen
 find_package(Eigen3 REQUIRED)
@@ -75,17 +75,17 @@ if(${Eigen3_FOUND})
 	MESSAGE( STATUS "Eigen FOUND")
 	target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_EIGEN3")
   target_include_directories(${PROJECT_NAME} PUBLIC "/usr/include/eigen3")
-endif(Eigen3_FOUND)
+endif(${Eigen3_FOUND})
 
 
-## Load Eigen
-find_package(OpenCL)
-if(${OpenCL_FOUND})
-  MESSAGE( STATUS "OpenCL FOUND")
-  target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_OPENGL")
-  target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCL_INCLUDE_DIR})
-  target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCL_LIBRARY})
-endif()
+## Load openCL
+# find_package(OpenCL)
+# if(${OpenCL_FOUND})
+#   MESSAGE( STATUS "OpenCL FOUND")
+#   target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_OPENGL")
+#   target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCL_INCLUDE_DIR})
+#   target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCL_LIBRARY})
+# endif()
 
 #########################################
 ######			Documentation	   ######

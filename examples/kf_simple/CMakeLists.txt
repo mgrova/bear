@@ -19,9 +19,6 @@
 ##  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##---------------------------------------------------------------------------------------------------------------------
 
-if(${BUILD_EXAMPLES}) 
-add_subdirectory(EKF_3D)
-add_subdirectory(kf_simple)
-add_subdirectory(particle_filter)
-endif()
-
+add_executable(kf_simple main.cpp)
+target_link_libraries(kf_simple LINK_PUBLIC bear)
+target_include_directories(kf_simple PUBLIC include)
