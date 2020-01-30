@@ -24,17 +24,18 @@
 
 int main(int _argc , char **_argv){
 
-    bear::KalmanFilter *kf;
+    bear::KalmanFilter *kf = nullptr;
 
     Eigen::Matrix<double, 4,1 > x0 = (Eigen::Matrix<double, 4,1 >() << 0.0 , 0.0, 0.0, 0.0).finished();
 
+    kf = new bear::KalmanFilter;
     kf->setUpKF(x0);
 
     std::chrono::time_point<std::chrono::system_clock> prevT;
     prevT = std::chrono::system_clock::now();
 
     std::vector<double> pos = {0.0 , 0.0};
-    std::vector<double> vel = {0.0 , 0.0};
+    std::vector<double> vel = {1.0 , 0.0};
     
     while(true){
         // pos[0] = pos[0] + vel[0]*0.1;
@@ -43,11 +44,9 @@ int main(int _argc , char **_argv){
         Eigen::Matrix<double, 4,1> Zk = (Eigen::Matrix<double,4,1>() <<
                                     pos[0] , pos[1] , vel[0] , vel[1]).finished();
 
-        std::cout << Zk << std::endl;
-
         auto t1 = std::chrono::system_clock::now();
         auto incT = std::chrono::duration_cast<std::chrono::milliseconds>(t1-prevT).count()/1000.0f;
-        kf->stepKF(Zk , incT);
+        kf->stepKF(Zk , static_cast<double>(incT));
         prevT= t1;
         Eigen::Matrix<double, 4,1> Xk = kf->state();
 

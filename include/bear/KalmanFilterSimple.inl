@@ -87,16 +87,14 @@ namespace bear {
 
 		Xfk_ = A_ * Xak_ ;//+ B_; 	
 		Pfk_ = A_ * Pak_ * A_.transpose() + R_;
-		std::cout << Pfk_ << std::endl;
-
 	}
 
 	//-----------------------------------------------------------------------------
 	void KalmanFilter::updateStep(const Eigen::Matrix<double, 4, 1 >&_Zk , const double _incT){
 		C_ = (Eigen::Matrix<double,4,4>()<< 1 , 0 , 0      ,    0   ,
 											0 , 1 , 0      ,    0   ,
-											1 , 0 , -incT_ ,    0   ,
-											0 , 1 , 0      , -incT_ ).finished();
+											1 , 0 , -_incT ,    0   ,
+											0 , 1 , 0      , -_incT ).finished();
 
 
 		K_ = Pfk_ * C_.transpose() * ((C_ * Pfk_ * C_.transpose() + Q_).inverse());	

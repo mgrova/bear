@@ -59,7 +59,6 @@ namespace bear {
 		Eigen::Matrix<double, 4, 1 > B_;
 		Eigen::Matrix<double, 4, 4 > C_;
         
-		double incT_ = 0.0;
 	};
 }
 
