@@ -19,6 +19,7 @@
 //  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //---------------------------------------------------------------------------------------------------------------------
 
+#include <bear/KalmanFilter.h>
 #include <iostream>
 
 namespace bear {
@@ -67,7 +68,7 @@ namespace bear {
 	}
 		
 	//-----------------------------------------------------------------------------
-	Eigen::Matrix<double,4,1> KalmanFilter::state() const{
+	Eigen::Matrix<double,4,1> KalmanFilter::state(){
 		return Xak_;
 	}
 

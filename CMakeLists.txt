@@ -26,7 +26,7 @@ PROJECT(bear VERSION 0.1 LANGUAGES C CXX)
 ######			General config	   ######
 #########################################
 
-option(BUILD_EXAMPLES "Compile examples" ON)
+option(BUILD_EXAMPLES "Compile examples" OFF)
 option(BUILD_TESTS    "Prepare tests"    OFF)
 option(BUILD_TOOLS    "Compile tools"    OFF)
 
@@ -151,7 +151,7 @@ write_basic_package_version_file(
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX} FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX} FILES_MATCHING PATTERN "*.inl")
 
-export(TARGETS bear NAMESPACE bear:: FILE bearTargets.cmake)
+export(TARGETS bear NAMESPACE bear:: FILE bear.cmake)
 
 # This generates bearTargets.cmake
 install(EXPORT bearTargets
@@ -160,20 +160,18 @@ install(EXPORT bearTargets
     DESTINATION lib/cmake/${PROJECT_NAME}
     )
 
-configure_file("${CMAKE_SOURCE_DIR}/cmake/templates/bearConfig.cmake.in"
-               "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-                @ONLY)
+configure_file(bearConfig.cmake.in bearConfig.cmake @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bearConfig.cmake"
-              "${CMAKE_CURRENT_BINARY_DIR}/bearConfigVersion.cmake" 
-        DESTINATION lib/cmake/${PROJECT_NAME}
+        DESTINATION lib/cmake/bear
         )
 
-# # uninstall target 
-# if(NOT TARGET uninstall) 
-#   configure_file( 
-#       "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/cmake_uninstall.cmake.in" 
-#       "${CMAKE_CURRENT_BINARY_DIR}/cmake/templates/cmake_uninstall.cmake" 
-#       IMMEDIATE @ONLY) 
+# uninstall target 
+if(NOT TARGET uninstall) 
+  configure_file( 
+      "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in" 
+      "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" 
+      IMMEDIATE @ONLY) 
  
-#   add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake) 
-# endif() 
+  add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake) 
+endif() 
+    

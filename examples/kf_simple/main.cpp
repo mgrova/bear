@@ -19,7 +19,7 @@
 //   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ---------------------------------------------------------------------------------------------------------------------
 
-#include<bear/KalmanFilterSimple.h>
+#include<bear/KalmanFilter.h>
 #include <thread>
 
 int main(int _argc , char **_argv){

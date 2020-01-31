@@ -37,7 +37,7 @@ namespace bear {
 		void setUpKF( const Eigen::Matrix<double, 4,1 > _x0 );
 
 		// last filtered estimation
-		Eigen::Matrix<double, 4, 1> state() const;
+		Eigen::Matrix<double, 4, 1> state();
 
 	public:
 		void stepKF(const Eigen::Matrix<double, 4, 1 > & _Zk, const double _incT);
@@ -61,7 +61,5 @@ namespace bear {
         
 	};
 }
-
-#include <bear/KalmanFilterSimple.inl>
 
 #endif	
