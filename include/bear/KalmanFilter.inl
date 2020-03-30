@@ -19,92 +19,60 @@
 //  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //---------------------------------------------------------------------------------------------------------------------
 
-#include <bear/KalmanFilter.h>
-#include <iostream>
 
 namespace bear {
 	
 	//-----------------------------------------------------------------------------
-	KalmanFilter::KalmanFilter(){
-		// Model matrix
-		A_.setIdentity();
-		B_ = (Eigen::Matrix<double,4,1>() << 1, 0, 0, 0).finished();
-		C_.setIdentity();
-
-		// Covariance matrix
-		double q = 0.1;
-		Q_ = (Eigen::Matrix<double,4,4>() << q*q, 0   , 0    , 0   ,
-											0   , q*q , 0    , 0   ,
-											0   , 0   , q*q  , 0   ,
-											0   , 0   , 0    , q*q ).finished();
-
-		double r = 0.1;
-		R_ = (Eigen::Matrix<double,4,4>() << r*r, 0   , 0      , 0   ,
-											0   , r*r , 0      , 0   ,
-											0   , 0   , r*r  , 0   ,
-											0   , 0   , 0      , r*r ).finished();
-
-		K_.setZero();
-		Pak_ = (Eigen::Matrix<double,4,4>() << r*r, 0   , 0      , 0   ,
-										        0 , r*r , 0      , 0   ,
-										        0 , 0   , 2.0*r*r, 0   ,
-										        0 , 0   , 0      , 2.0*r*r ).finished();
-		Pfk_.setIdentity();
+    template<typename _type, int _D1, int _D2>
+	KalmanFilter<_type, _D1, _D2>::KalmanFilter(){
+		
 	}
+
 	//-----------------------------------------------------------------------------
-	void KalmanFilter::setUpKF(const Eigen::Matrix<double, 4, 4 > 	_Q, 
-								const Eigen::Matrix<double, 4, 4 >	_R, 
-								const Eigen::Matrix<double, 4, 1 > 	_x0){
+    template<typename _type, int _D1, int _D2>
+	void KalmanFilter<_type, _D1, _D2>::setupKF( const Eigen::Matrix<_type, _D1, _D1 > _Q , 
+					            				 const Eigen::Matrix<_type, _D2, _D2 > _R , 
+					            				 const Eigen::Matrix<_type, _D1,  1  > _x0,
+												 const Eigen::Matrix<_type, _D2, _D1 > _C ){
 		Q_ = _Q;
 		R_ = _R;
 		Xak_ = _x0;
 		Xfk_ = _x0;
+		C_ = _C;
 	}
 
 	//-----------------------------------------------------------------------------
-	void KalmanFilter::setUpKF(const Eigen::Matrix<double, 4, 1 > 	_x0){
-		Xak_ = _x0;
-		Xfk_ = _x0;
-	}
-		
-	//-----------------------------------------------------------------------------
-	Eigen::Matrix<double,4,1> KalmanFilter::state(){
+    template<typename _type, int _D1, int _D2>
+	Eigen::Matrix<_type , _D1 , 1> KalmanFilter<_type, _D1, _D2>::state() const{
 		return Xak_;
 	}
 
 	//-----------------------------------------------------------------------------
-	void KalmanFilter::stepKF(const Eigen::Matrix<double, 4, 1 > & _Zk, const double _incT){
+    template<typename _type, int _D1, int _D2>
+	void KalmanFilter<_type, _D1, _D2>::stepKF(const Eigen::Matrix<_type, _D2, 1 > & _Zk, const _type _incT){
 		predictionStep(_incT);
-		updateStep(_Zk , _incT);
+		updateStep(_Zk);
 	}
 
 	//-----------------------------------------------------------------------------
-	void KalmanFilter::predictionStep(const double _incT){
-		A_ = (Eigen::Matrix<double,4,4>() << 1 , 0 , _incT , 0    ,
-										     0 , 1 , 0     , _incT,
-										     0 , 0 , 1     , 0    ,
-										     0 , 0 , 0     , 1    ).finished();
-		
+    template<typename _type, int _D1, int _D2>
+	void KalmanFilter<_type, _D1, _D2>::predictionStep(const _type _incT){
+        updateA(_incT);
 
 		Xfk_ = A_ * Xak_ ;//+ B_; 	
-		Pfk_ = A_ * Pak_ * A_.transpose() + R_;
+		Pfk_ = A_ * Pak_ * A_.transpose() + Q_;
 	}
 
 	//-----------------------------------------------------------------------------
-	void KalmanFilter::updateStep(const Eigen::Matrix<double, 4, 1 >&_Zk , const double _incT){
-		C_ = (Eigen::Matrix<double,4,4>()<< 1 , 0 , 0      ,    0   ,
-											0 , 1 , 0      ,    0   ,
-											1 , 0 , -_incT ,    0   ,
-											0 , 1 , 0      , -_incT ).finished();
+    template<typename _type, int _D1, int _D2>
+	void KalmanFilter<_type, _D1, _D2>::updateStep(const Eigen::Matrix<_type, _D2, 1 >&_Zk){
 
-
-		K_ = Pfk_ * C_.transpose() * ((C_ * Pfk_ * C_.transpose() + Q_).inverse());	
+		K_ = Pfk_ * C_.transpose() * ((C_ * Pfk_ * C_.transpose() + R_).inverse());	
 		Xak_ = Xfk_ + K_ * (_Zk - C_ * Xfk_);
 
-		Eigen::Matrix<double, 4, 4> I; I.setIdentity();
+		Eigen::Matrix<_type, _D1, _D1> I; I.setIdentity();
 		Pak_ = (I - K_ * C_) * Pfk_;
 
 	}
-	//-----------------------------------------------------------------------------
 	
 }

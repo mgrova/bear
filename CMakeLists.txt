@@ -26,9 +26,7 @@ PROJECT(bear VERSION 0.1 LANGUAGES C CXX)
 ######			General config	   ######
 #########################################
 
-option(BUILD_EXAMPLES "Compile examples" OFF)
-option(BUILD_TESTS    "Prepare tests"    OFF)
-option(BUILD_TOOLS    "Compile tools"    OFF)
+option(BUILD_EXAMPLES "Compile examples" ON)
 
 #########################################
 ###### Loading 3rd party libraries ######
@@ -40,7 +38,7 @@ if( NOT CMAKE_BUILD_TYPE )
        FORCE )
 endif()
 
-# set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/" ${CMAKE_MODULE_PATH})
 
 
 #########################################
@@ -108,24 +106,6 @@ if(${BUILD_EXAMPLES})
 endif()
 
 #########################################
-######			Tools	                 ######
-#########################################
-# if(${BUILD_TOOLS})
-# 	add_subdirectory(tools)
-# endif()
-
-
-#########################################
-######			Test				######
-#########################################
-
-# find_package(GTest)
-# if(${GTest_FOUND})
-#   enable_testing()
-#   add_subdirectory(tests)
-# endif()
-
-#########################################
 ######			INSTALL 		   ######
 #########################################
 include(CMakePackageConfigHelpers)
@@ -160,7 +140,7 @@ install(EXPORT bearTargets
     DESTINATION lib/cmake/${PROJECT_NAME}
     )
 
-configure_file(bearConfig.cmake.in bearConfig.cmake @ONLY)
+configure_file("${CMAKE_MODULE_PATH}/bearConfig.cmake.in" bearConfig.cmake @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bearConfig.cmake"
         DESTINATION lib/cmake/bear
         )
@@ -168,7 +148,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bearConfig.cmake"
 # uninstall target 
 if(NOT TARGET uninstall) 
   configure_file( 
-      "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in" 
+      "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in" 
       "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" 
       IMMEDIATE @ONLY) 
  

@@ -25,37 +25,37 @@
 
 int main(int _argc , char **_argv){
 
-    bear::KalmanFilter *kf = nullptr;
+    bear::KalmanFilter<double, 4, 4> kf;
 
-    Eigen::Matrix<double, 4,1 > x0 = (Eigen::Matrix<double, 4,1 >() << 0.0 , 0.0, 0.0, 0.0).finished();
+    // Eigen::Matrix<double, 4,1 > x0 = (Eigen::Matrix<double, 4,1 >() << 0.0 , 0.0, 0.0, 0.0).finished();
 
-    kf = new bear::KalmanFilter;
-    kf->setUpKF(x0);
+    // kf = new bear::KalmanFilter;
+    // kf->setUpKF(x0);
 
-    std::chrono::time_point<std::chrono::system_clock> prevT;
-    prevT = std::chrono::system_clock::now();
+    // std::chrono::time_point<std::chrono::system_clock> prevT;
+    // prevT = std::chrono::system_clock::now();
 
-    std::vector<double> pos = {0.0 , 0.0};
-    std::vector<double> vel = {1.0 , 0.0};
+    // std::vector<double> pos = {0.0 , 0.0};
+    // std::vector<double> vel = {1.0 , 0.0};
     
-    while(true){
-        // pos[0] = pos[0] + vel[0]*0.1;
-        // pos[1] = pos[1] + vel[1]*0.1;
+    // while(true){
+    //     // pos[0] = pos[0] + vel[0]*0.1;
+    //     // pos[1] = pos[1] + vel[1]*0.1;
 
-        Eigen::Matrix<double, 4,1> Zk = (Eigen::Matrix<double,4,1>() <<
-                                    pos[0] , pos[1] , vel[0] , vel[1]).finished();
+    //     Eigen::Matrix<double, 4,1> Zk = (Eigen::Matrix<double,4,1>() <<
+    //                                 pos[0] , pos[1] , vel[0] , vel[1]).finished();
 
-        auto t1 = std::chrono::system_clock::now();
-        auto incT = std::chrono::duration_cast<std::chrono::milliseconds>(t1-prevT).count()/1000.0f;
-        kf->stepKF(Zk , static_cast<double>(incT));
-        prevT= t1;
-        Eigen::Matrix<double, 4,1> Xk = kf->state();
+    //     auto t1 = std::chrono::system_clock::now();
+    //     auto incT = std::chrono::duration_cast<std::chrono::milliseconds>(t1-prevT).count()/1000.0f;
+    //     kf->stepKF(Zk , static_cast<double>(incT));
+    //     prevT= t1;
+    //     Eigen::Matrix<double, 4,1> Xk = kf->state();
 
-        std::cout << "Position predicted: " << Xk(0) << " " << Xk(1)  << std::endl;
-        std::cout << "Velocidad predicted: " << Xk(2) << " " << Xk(3)  << std::endl;
+    //     std::cout << "Position predicted: " << Xk(0) << " " << Xk(1)  << std::endl;
+    //     std::cout << "Velocidad predicted: " << Xk(2) << " " << Xk(3)  << std::endl;
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    }
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    // }
 
     return 0;
 }

@@ -23,43 +23,48 @@
 #define BEAR_KALMAN_FILTER_SIMPLE_H_
 
 #include <Eigen/Eigen>
+#include <iostream>
 
 namespace bear {
 	
+	template<typename _type, int _D1, int _D2>
 	class KalmanFilter{
 	public:
 		KalmanFilter();
 
-		void setUpKF( const Eigen::Matrix<double, 4,4 > _Q  , 
-					  const Eigen::Matrix<double, 4,4 >	_R  , 
-					  const Eigen::Matrix<double, 4,1 > _x0 );
-
-		void setUpKF( const Eigen::Matrix<double, 4,1 > _x0 );
+		void setupKF( const Eigen::Matrix<_type, _D1, _D1 > _Q , 
+					  const Eigen::Matrix<_type, _D2, _D2 >	_R , 
+					  const Eigen::Matrix<_type, _D1,  1  > _x0,
+					  const Eigen::Matrix<_type, _D2, _D1 > _C  );
+		
 
 		// last filtered estimation
-		Eigen::Matrix<double, 4, 1> state();
+		Eigen::Matrix<_type, _D1, 1> state() const;
 
 	public:
-		void stepKF(const Eigen::Matrix<double, 4, 1 > & _Zk, const double _incT);
+		void stepKF(const Eigen::Matrix<_type, _D2, 1 > & _Zk, const _type _incT);
 
 	protected:
-
+	 // Non specific functions of the EKF. 
+		virtual void updateA(const double _incT) = 0;
 		// KF steps.
-		void predictionStep(const double _incT);
-		void updateStep(const Eigen::Matrix<double, 4, 1 >&_Zk , const double _incT);
+		void predictionStep(const _type _incT);
+		void updateStep(const Eigen::Matrix<_type, _D2, 1 >&_Zk);
 
 	protected:
-		Eigen::Matrix<double, 4, 1 > Xfk_, Xak_;    // actual and forecast state at time k
-		Eigen::Matrix<double, 4, 4 > K_;			// Kalman gain
-		Eigen::Matrix<double, 4, 4 > Pak_, Pfk_;	// actual and forecast prediction matrix at time k (sigma)
-		Eigen::Matrix<double, 4, 4 > Q_;			// Observation covariance (sensors)
-		Eigen::Matrix<double, 4, 4 > R_;			// Prediction covariance (model)
+		Eigen::Matrix<_type, _D1,  1  > Xfk_, Xak_; // actual and forecast state at time k
+		Eigen::Matrix<_type, _D1, _D2 > K_;			// Kalman gain
+		Eigen::Matrix<_type, _D1, _D1 > Pak_, Pfk_;	// actual and forecast prediction matrix at time k (sigma)
+		Eigen::Matrix<_type, _D1, _D1 > Q_;			// Prediction covariance (model)
+		Eigen::Matrix<_type, _D2, _D2 > R_;			// Observation covariance (sensors)
 
-        Eigen::Matrix<double, 4, 4 > A_;
-		Eigen::Matrix<double, 4, 1 > B_;
-		Eigen::Matrix<double, 4, 4 > C_;
+        Eigen::Matrix<_type, _D1, _D1 > A_;		// Transition state matrix
+		Eigen::Matrix<_type, _D1,  1  > B_;
+		Eigen::Matrix<_type, _D2, _D1 > C_;		// Measure matrix
         
 	};
 }
+
+#include <bear/KalmanFilter.inl>
 
 #endif	
