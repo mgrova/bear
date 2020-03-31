@@ -42,14 +42,16 @@ namespace bear {
 		Eigen::Matrix<_type, _D1, 1> state() const;
 
 	public:
+		
+		// KF steps (located here to allow only the prediction step if there is no observation)
+		void predictionStep(const _type _incT);
+		void updateStep(const Eigen::Matrix<_type, _D2, 1 >&_Zk);
+		
 		void stepKF(const Eigen::Matrix<_type, _D2, 1 > & _Zk, const _type _incT);
 
 	protected:
-	 // Non specific functions of the EKF. 
+	 	// Non specific functions of the EKF. 
 		virtual void updateA(const double _incT) = 0;
-		// KF steps.
-		void predictionStep(const _type _incT);
-		void updateStep(const Eigen::Matrix<_type, _D2, 1 >&_Zk);
 
 	protected:
 		Eigen::Matrix<_type, _D1,  1  > Xfk_, Xak_; // actual and forecast state at time k
