@@ -56,6 +56,12 @@ namespace bear {
 
 	//-----------------------------------------------------------------------------
     template<typename _type, int _D1, int _D2>
+	void KalmanFilter<_type, _D1, _D2>::stepKF(const _type _incT){
+		predictionStep(_incT);
+	}
+
+	//-----------------------------------------------------------------------------
+    template<typename _type, int _D1, int _D2>
 	void KalmanFilter<_type, _D1, _D2>::predictionStep(const _type _incT){
         updateA(_incT);
 
