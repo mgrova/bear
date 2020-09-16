@@ -1,7 +1,7 @@
 ##---------------------------------------------------------------------------------------------------------------------
 ##  BEAR
 ##---------------------------------------------------------------------------------------------------------------------
-##  Copyright 2019 ViGUS University of Seville
+##  Copyright 2020 ViGUS University of Seville
 ##---------------------------------------------------------------------------------------------------------------------
 ##  Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 ##  and associated documentation files (the "Software"), to deal in the Software without restriction, 
@@ -74,16 +74,6 @@ if(${Eigen3_FOUND})
 	target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_EIGEN3")
   target_include_directories(${PROJECT_NAME} PUBLIC "/usr/include/eigen3")
 endif(${Eigen3_FOUND})
-
-
-## Load openCL
-# find_package(OpenCL)
-# if(${OpenCL_FOUND})
-#   MESSAGE( STATUS "OpenCL FOUND")
-#   target_compile_definitions(${PROJECT_NAME} PUBLIC "BEAR_USE_OPENGL")
-#   target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCL_INCLUDE_DIR})
-#   target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCL_LIBRARY})
-# endif()
 
 #########################################
 ######			Documentation	   ######

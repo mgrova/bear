@@ -19,6 +19,13 @@
 ##  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##---------------------------------------------------------------------------------------------------------------------
 
-add_executable(kf_simple main.cpp)
-target_link_libraries(kf_simple LINK_PUBLIC bear)
-target_include_directories(kf_simple PUBLIC include)
+add_executable(app_KFbboxes src/main.cpp src/KFBBoxes.cpp)
+target_link_libraries(app_KFbboxes LINK_PUBLIC bear)
+target_include_directories(app_KFbboxes PUBLIC include)
+
+find_package(Darknet REQUIRED HINTS "/home/mgrova/programming/ml/darknet/share")
+if(${Darknet_FOUND})
+  target_link_libraries(app_KFbboxes LINK_PUBLIC Darknet::dark)
+  target_compile_definitions(app_KFbboxes PUBLIC HAS_DARKNET)
+endif()
+
