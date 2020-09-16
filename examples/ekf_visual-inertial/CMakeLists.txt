@@ -19,6 +19,6 @@
 ##  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##---------------------------------------------------------------------------------------------------------------------
 
-add_executable(example_EKF_3D src/EKF.cpp src/main.cpp)
-target_link_libraries(example_EKF_3D LINK_PUBLIC bear)
-target_include_directories(example_EKF_3D PUBLIC include)
+add_executable(example_ekf_visual-inertial src/EKF.cpp src/main.cpp)
+target_link_libraries(example_ekf_visual-inertial LINK_PUBLIC bear)
+target_include_directories(example_ekf_visual-inertial PUBLIC include)

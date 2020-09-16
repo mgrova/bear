@@ -1,7 +1,7 @@
 ##---------------------------------------------------------------------------------------------------------------------
 ##  BEAR
 ##---------------------------------------------------------------------------------------------------------------------
-##  Copyright 2019 ViGUS University of Seville
+##  Copyright 2020 - Marco Montes Grova (a.k.a. mgrova) marrcogrova@gmail.com
 ##---------------------------------------------------------------------------------------------------------------------
 ##  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 ##  and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,10 +19,6 @@
 ##  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##---------------------------------------------------------------------------------------------------------------------
 
-if(${BUILD_EXAMPLES}) 
-    add_subdirectory(kf_bboxes)
-    add_subdirectory(kf_3d-movement)
-    add_subdirectory(ekf_visual-inertial)
-    add_subdirectory(particle_filter)
-endif()
-
+add_executable(example_kf-movement src/main.cpp src/KF3DPosition.cpp)
+target_link_libraries(example_kf-movement LINK_PUBLIC bear)
+target_include_directories(example_kf-movement PUBLIC include)

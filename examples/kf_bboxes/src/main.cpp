@@ -52,7 +52,7 @@ int main(int _argc , char **_argv){
         yoloCfg     = _argv[1];
         yoloWeights = _argv[2];
     }else{
-        std::cout << "Error reading cfg and weigths.\n example execution: ./kf_bboxes <yolo_cfg> <yolo_weigths> \n";
+        std::cout << "Error reading cfg and weigths.\n example execution: ./example_kf-bboxes <yolo_cfg> <yolo_weigths> \n";
         return -1;
 
     }
@@ -68,8 +68,7 @@ int main(int _argc , char **_argv){
         return -1;
     }
 
-    bear::KFBBoxes kf; //= new bear::KFBBoxes();
-
+    bear::KFBBoxes kf;
     std::chrono::time_point<std::chrono::system_clock> prevT;
 
     bool doneFirstDetection = false;

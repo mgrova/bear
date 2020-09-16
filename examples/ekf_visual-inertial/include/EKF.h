@@ -27,8 +27,8 @@
 
 
 namespace bear{
-	// State vector Xk = {x, y, z, vx, vy, vz}
-	// Observation vector Zk = {x, y, z}
+	// State vector Xk = {x, y, z, vx, vy, vz, ax, ay, az, bx, by, bz}
+	// Observation vector Zk = {x, y, z, ax, ay, az}
 	class EKF : public  bear::ExtendedKalmanFilter<double,12,6>{
 	public:
         EKF(){};
