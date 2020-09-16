@@ -1,6 +1,6 @@
 # KALMAN FILTER BOUNDING BOXES
 
-Kalman example to track mobile phone using YOLO-V4 tiny detector.
+Kalman example to track the mobile phone using YOLO-V4 tiny detector.
 
 ---
 
@@ -14,7 +14,7 @@ mkdir build_release; cd build_release;
 cmake .. ; make -j; sudo make install
 ```
 
-It's necesary change [this line](https://github.com/Ric92/aerialcore_release/blob/77ca4c74872a6f2b4be91f86802278c9af28227b/software/perception/detectors/CMakeLists.txt#L71) of CMakeLists.txt to your own path.
+It's necesary change [this line](https://github.com/mgrova/bear/blob/d40c50c22fb53f659c6165cc751c5a69b9d560f6/examples/kf_bboxes/CMakeLists.txt#L26) of CMakeLists.txt to your own path.
 
 ## Downloads
 
