@@ -20,13 +20,20 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 #include "KFBBoxes.h"
+
+#ifdef HAS_DARKNET
 #include <yolo_v2_class.hpp>
+#endif
 
 #include <iostream>
 #include <thread>
 
+#ifdef HAS_DARKNET
 Detector* detector_;
+#endif
 
+
+#ifdef HAS_DARKNET
 bool detectMobile(cv::Mat _image, bear::BoundingBox &_detection){
     std::vector<bbox_t> detections = detector_->detect(_image , 0.2);
     
@@ -44,9 +51,11 @@ bool detectMobile(cv::Mat _image, bear::BoundingBox &_detection){
 
     return success;
 }
+#endif
 
 int main(int _argc , char **_argv){
 
+#ifdef HAS_DARKNET
     std::string yoloCfg, yoloWeights;
     if(_argc == 3){
         yoloCfg     = _argv[1];
@@ -115,4 +124,7 @@ int main(int _argc , char **_argv){
     cv::destroyWindow("Detections image");
                 
     return -1;
+    #else
+    std::cerr << "BEAR compiled without darknet" << std::endl;
+    #endif
 }

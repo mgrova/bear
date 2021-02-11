@@ -23,7 +23,7 @@ add_executable(example_kf-bboxes src/main.cpp src/KFBBoxes.cpp)
 target_link_libraries(example_kf-bboxes LINK_PUBLIC bear)
 target_include_directories(example_kf-bboxes PUBLIC include)
 
-find_package(Darknet REQUIRED HINTS "/home/mgrova/programming/ml/darknet/share")
+find_package(Darknet HINTS "/home/mgrova/programming/ml/darknet/share")
 if(${Darknet_FOUND})
   target_link_libraries(example_kf-bboxes LINK_PUBLIC Darknet::dark)
   target_compile_definitions(example_kf-bboxes PUBLIC HAS_DARKNET)
