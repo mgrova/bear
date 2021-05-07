@@ -20,5 +20,11 @@
 ##---------------------------------------------------------------------------------------------------------------------
 
 add_executable(example_kf-movement src/main.cpp src/KF3DPosition.cpp)
-target_link_libraries(example_kf-movement LINK_PUBLIC bear)
 target_include_directories(example_kf-movement PUBLIC include)
+target_link_libraries(example_kf-movement LINK_PUBLIC bear)
+find_package(PythonLibs)
+if(${PythonLibs_FOUND})
+    target_include_directories(example_kf-movement PUBLIC ${PYTHON_INCLUDE_DIRS})
+    target_link_libraries(example_kf-movement LINK_PUBLIC ${PYTHON_LIBRARIES})
+	target_compile_definitions(example_kf-movement PUBLIC "BEAR_HAS_PYTHON")
+endif(${PythonLibs_FOUND})
