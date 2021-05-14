@@ -28,6 +28,7 @@ matrix:
             - libopencv-dev
             - libopencv-contrib-dev
             - libpcl-dev
+            - python
 
 
 before_install:
